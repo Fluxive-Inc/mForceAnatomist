@@ -1,0 +1,37 @@
+<div class="glass-panel group p-6 flex flex-col h-full cursor-pointer relative overflow-hidden transition-all duration-300 hover:shadow-hover-glow hover:backdrop-blur-[16px]" [routerLink]="['/module', module.id]">
+  
+  <!-- Subtle Glow Effect on Hover -->
+  <div class="absolute inset-0 bg-fx-accent-hover opacity-0 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none"></div>
+
+  <!-- Header: Icon & Category -->
+  <div class="flex items-center justify-between mb-4 z-10">
+    <div class="w-12 h-12 flex items-center justify-center rounded-lg bg-fx-bg-primary border border-fx-border-subtle text-fx-text-secondary group-hover:text-fx-accent transition-colors duration-300">
+      <svg class="w-6 h-6" viewBox="0 0 24 24" [innerHTML]="getIconSvg(module.iconType)"></svg>
+    </div>
+    <span class="text-[10px] uppercase font-mono tracking-widest px-2 py-1 bg-fx-bg-primary border border-fx-border-subtle text-fx-text-secondary rounded">
+      {{ module.category }}
+    </span>
+  </div>
+
+  <!-- Body: Title & Desc -->
+  <div class="mb-6 flex-grow z-10">
+    <h3 class="text-lg font-bold text-fx-text-primary mb-1 group-hover:text-fx-accent transition-colors">{{ module.name }}</h3>
+    <p class="text-sm text-fx-text-secondary line-clamp-3">{{ module.description }}</p>
+  </div>
+
+  <!-- Footer: Meta info -->
+  <div class="mt-auto pt-4 border-t border-fx-border-subtle flex items-center justify-between text-xs font-mono text-fx-text-secondary z-10">
+    <div class="flex items-center space-x-2">
+      <span class="text-fx-accent">v{{ module.version }}</span>
+      <span>•</span>
+      <span>{{ module.fileSize }}</span>
+    </div>
+    <div class="flex items-center space-x-1 group-hover:text-white transition-colors">
+      <span>View Details</span>
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,21 @@
+<div class="flex h-screen w-screen overflow-hidden bg-fx-bg-primary text-fx-text-primary">
+  <!-- Cyber-Botanical Side Navigation -->
+  <app-side-nav class="h-full z-20 shadow-neon"></app-side-nav>
+
+  <!-- Main Content Area -->
+  <div class="flex flex-col flex-1 relative overflow-hidden">
+    <!-- Header with Theme Toggle -->
+    <app-header class="z-10 w-full"></app-header>
+
+    <!-- Atrium Router Outlet (Graft Selector, Marketplace, etc) -->
+    <main class="flex-1 overflow-y-auto px-8 pb-8 relative z-0">
+      <router-outlet></router-outlet>
+    </main>
+
+    <!-- Botanical Background Glows -->
+    <div class="absolute inset-0 pointer-events-none opacity-20">
+      <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-fx-accent rounded-full filter blur-[120px]"></div>
+      <div class="absolute bottom-1/4 right-1/4 w-[30rem] h-[30rem] bg-fx-accent-secondary rounded-full filter blur-[150px]"></div>
+    </div>
+  </div>
+</div>

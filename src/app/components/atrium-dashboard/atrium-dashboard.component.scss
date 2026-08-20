@@ -1,0 +1,31 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: #010101; 
+}
+
+.glass-tooltip {
+  background: rgba(5, 15, 10, 0.85);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  box-shadow: inset 0 1px 0 rgba(16, 185, 129, 0.4), 0 20px 40px rgba(0,0,0,0.8), 0 0 30px rgba(16, 185, 129, 0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  min-width: 260px;
+  transform: translate(0, 0); /* Let Angular styles handle positioning */
+  animation: tooltip-fade-in 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes tooltip-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

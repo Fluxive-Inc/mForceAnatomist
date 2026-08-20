@@ -1,0 +1,70 @@
+<div class="glass-panel rounded-none h-full w-64 border-r border-t-0 border-b-0 border-l-0 border-fx-glass-border flex flex-col pt-8 pb-4">
+  <div class="px-6 mb-12 flex items-center space-x-3">
+    <!-- Neon Seed Icon -->
+    <div class="w-8 h-8 rounded-full border border-fx-accent shadow-neon flex items-center justify-center">
+      <svg class="w-4 h-4 text-fx-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </div>
+    <div class="flex flex-col">
+      <span class="text-xs font-display tracking-widest text-fx-accent">MFORCE</span>
+      <span class="text-sm font-display font-bold text-fx-text-primary tracking-wider">ANATOMIST</span>
+    </div>
+  </div>
+
+  <nav class="flex-1 flex flex-col space-y-2 px-4">
+    <!-- Nav Links -->
+    <a routerLink="/" routerLinkActive="active-nav" [routerLinkActiveOptions]="{exact: true}" class="group relative px-6 py-4 flex items-center text-fx-text-secondary hover:text-fx-accent transition-all duration-300 rounded-lg hover:bg-fx-bg-surface overflow-hidden">
+      <!-- Glow Underlay -->
+      <div class="absolute inset-0 bg-fx-accent opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
+      <!-- Neon Border Effect -->
+      <div class="absolute left-0 top-0 bottom-0 w-[1px] bg-gradient-to-b from-fx-accent to-transparent opacity-0 group-[.active-nav]:opacity-100 group-hover:opacity-100 transition-opacity duration-300"></div>
+      
+      <svg class="w-5 h-5 mr-4 group-[.active-nav]:text-fx-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+      </svg>
+      <span class="font-data text-sm tracking-widest group-[.active-nav]:text-white">The Atrium</span>
+    </a>
+
+    <a href="#" class="group relative px-6 py-4 flex items-center text-fx-text-secondary hover:text-fx-accent transition-all duration-300 rounded-lg hover:bg-fx-bg-surface overflow-hidden">
+      <div class="absolute inset-0 bg-fx-accent opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
+      <div class="absolute left-0 top-0 bottom-0 w-[1px] bg-gradient-to-b from-fx-accent to-transparent opacity-0 group-[.active-nav]:opacity-100 group-hover:opacity-100 transition-opacity duration-300"></div>
+      
+      <svg class="w-5 h-5 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+      </svg>
+      <span class="font-data text-sm tracking-widest">Seed Banks</span>
+    </a>
+
+    <a routerLink="/root-systems" routerLinkActive="active-nav" class="group relative px-6 py-4 flex items-center text-fx-text-secondary hover:text-fx-accent transition-all duration-300 rounded-lg hover:bg-fx-bg-surface overflow-hidden">
+      <div class="absolute inset-0 bg-fx-accent opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
+      <div class="absolute left-0 top-0 bottom-0 w-[1px] bg-gradient-to-b from-fx-accent to-transparent opacity-0 group-[.active-nav]:opacity-100 group-hover:opacity-100 transition-opacity duration-300"></div>
+      
+      <svg class="w-5 h-5 mr-4 group-[.active-nav]:text-fx-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+      </svg>
+      <span class="font-data text-sm tracking-widest group-[.active-nav]:text-white">Root Systems</span>
+    </a>
+
+    <a routerLink="/marketplace" routerLinkActive="active-nav" class="group relative px-4 py-3 flex items-center text-fx-text-secondary hover:text-fx-accent transition-all duration-300 rounded-lg hover:bg-fx-bg-surface overflow-hidden">
+      <div class="absolute inset-0 bg-fx-accent opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
+      <div class="absolute left-0 top-0 bottom-0 w-0.5 bg-fx-accent opacity-0 group-[.active-nav]:opacity-100 group-hover:opacity-100 transition-opacity duration-300 shadow-neon"></div>
+      
+      <svg class="w-5 h-5 mr-3 group-[.active-nav]:text-fx-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+      </svg>
+      <span class="font-data text-sm tracking-wide group-[.active-nav]:text-white">Marketplace</span>
+    </a>
+  </nav>
+
+  <!-- Bottom Settings -->
+  <div class="px-4 mt-auto">
+    <a href="#" class="group relative px-6 py-4 flex items-center text-fx-text-secondary hover:text-fx-text-primary transition-all duration-300 rounded-lg">
+      <svg class="w-5 h-5 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+      <span class="font-data text-sm tracking-widest">Settings</span>
+    </a>
+  </div>
+</div>

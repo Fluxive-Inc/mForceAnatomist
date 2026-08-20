@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  /* LUNAR MODE (Dark - Default) */
+  --fx-bg-primary: #020202;
+  --fx-bg-surface: #0A0A0A;
+  --fx-bg-glass: rgba(10, 10, 10, 0.75);
+  --fx-border-subtle: rgba(255, 255, 255, 0.04);
+  --fx-glass-border: rgba(255, 255, 255, 0.04);
+  --fx-text-primary: #FFFFFF;
+  --fx-text-secondary: #8B949E;
+  --fx-accent: #10B981;
+  --fx-accent-secondary: #2DD4BF;
+  --fx-accent-hover: #10B981;
+  --blur-amount: 16px;
+}
+
+body.solar-mode {
+  /* SOLAR MODE (Light) */
+  --fx-bg-primary: #F4F5F7;
+  --fx-bg-surface: #FFFFFF;
+  --fx-bg-glass: rgba(255, 255, 255, 0.65);
+  --fx-border-subtle: rgba(0, 0, 0, 0.05);
+  --fx-glass-border: rgba(0, 0, 0, 0.05);
+  --fx-text-primary: #1A1A1A;
+  --fx-text-secondary: #475569;
+  --fx-accent: #00B359;
+  --fx-accent-secondary: #0F2C59;
+  --fx-accent-hover: #0F2C59;
+  --blur-amount: 16px;
+}
+
+body {
+  background-color: var(--fx-bg-primary);
+  color: var(--fx-text-primary);
+  font-family: 'Exo 2', sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  background: var(--fx-bg-glass);
+  border: 1px solid var(--fx-glass-border);
+  backdrop-filter: blur(var(--blur-amount)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--blur-amount)) saturate(180%);
+  border-radius: 0.75rem;
+  transition: background-color 300ms ease, border-color 300ms ease, box-shadow 300ms ease, filter 300ms ease, backdrop-filter 300ms ease;
+}
+
+.glass-panel:hover {
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(16, 185, 129, 0.2);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Orbitron', sans-serif;
+}
+
+code, pre {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Holographic Watermark Utility */
+.holographic-watermark {
+  position: relative;
+  overflow: hidden;
+}
+
+.holographic-watermark::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  right: -20%;
+  width: 100%;
+  height: 140%;
+  background-size: contain;
+  background-position: right center;
+  background-repeat: no-repeat;
+  opacity: 0.04;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+  z-index: 0;
+  filter: grayscale(100%);
+  transition: background-image 0.5s ease;
+}
+
+.holographic-watermark[data-system="angular"]::before { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 250"><path fill="%23DD0031" d="M125 30L31.9 63.2l14.2 123.1L125 230l78.9-43.7 14.2-123.1z"/><path fill="%23C3002F" d="M125 30v200l78.9-43.7 14.2-123.1z"/><path fill="%23FFF" d="M125 52.1L66.8 182.6h21.7l11.7-29.2h49.4l11.7 29.2H183L125 52.1zm17 83.3h-34l17-40.9 17 40.9z"/></svg>'); }
+.holographic-watermark[data-system="flutter"]::before { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 166 202"><path fill="%2347C5FB" d="M2.74 54.01L15.35 41.4l50.08-50.07A22.14 22.14 0 0181.1 0h34.6L2.74 112.96V54.01z"/><path fill="%2347C5FB" d="M2.74 148.65L47.2 104.2l30.45 30.45-64.84 64.84a22.14 22.14 0 01-15.67 6.5H2.74v-57.34z"/><path fill="%2300569E" d="M115.7 104.2l30.45-30.45L115.7 43.3 77.65 81.35z"/><path fill="%2300B5F8" d="M77.65 134.65l38.05-38.05 47.56 47.56-47.56 47.56z"/></svg>'); }
+.holographic-watermark[data-system="react"]::before { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.5 -10.23174 23 20.46348"><circle cx="0" cy="0" r="2.05" fill="%2361dafb"/><g stroke="%2361dafb" stroke-width="1" fill="none"><ellipse rx="11" ry="4.2"/><ellipse rx="11" ry="4.2" transform="rotate(60)"/><ellipse rx="11" ry="4.2" transform="rotate(120)"/></g></svg>'); }
+.holographic-watermark[data-system="vue"]::before { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 221"><path fill="%2341B883" d="M204.8 0H256L128 220.8 0 0h51.2L128 132.48z"/><path fill="%2335495E" d="M204.8 0H153.6L128 44.16 102.4 0H51.2L128 132.48z"/></svg>'); }

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Anatomist | Fluxive Inc.</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <!-- Devicon Library for Holographic Plant Logos -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+  
+  <!-- VisionSync: Launchpad Protocol -->
+  <script>window.FLUXIVE_BRIDGE_API = window.location.origin;</script>
+  <script src="https://machineforce.fluxive.ai/launch.js" async></script>
+  
+  <!-- VisionSync: Refresh Guard -->
+  <link rel="stylesheet" href="assets/css/refresh-toast.css">
+</head>
+<body>
+  <app-root></app-root>
+  
+  <div id="fx-refresh-toast" class="fx-toast" onclick="location.reload(true)" style="display: none;">
+      <div class="fx-toast-content">
+          <div class="fx-toast-title">SYSTEM UPDATED</div>
+          <div class="fx-toast-desc">Tap to Refresh</div>
+      </div>
+  </div>
+  <script src="assets/js/refresh-guard.js" defer></script>
+  
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/machineforce-proxy.js', { scope: '/' })
+        .then(reg => console.log('[FluxiveProxy] Active. Scope:', reg.scope))
+        .catch(err => console.warn('[FluxiveProxy] SW failed:', err));
+    }
+  </script>
+</body>
+</html>

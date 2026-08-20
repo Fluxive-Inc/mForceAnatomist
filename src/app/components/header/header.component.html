@@ -1,0 +1,51 @@
+<header class="w-full z-50 px-6 py-4">
+  <div class="glass-panel flex items-center justify-between px-6 py-3">
+    
+    <!-- Logo & Branding -->
+    <div class="flex items-center space-x-4 cursor-pointer" routerLink="/">
+      <div class="w-8 h-8 rounded bg-fx-accent-hover flex items-center justify-center text-fx-bg-primary font-bold shadow-neon">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.286 1.051l-1.493 1.493a1 1 0 01-.707.293H4.535a1 1 0 01-.707-.293l-1.493-1.493a1 1 0 01-.286-1.051l1.738-5.42-1.233-.616a1 1 0 01.894-1.79l1.599.8L9 4.323V3a1 1 0 011-1zm-5.165 9.813l1.583 1.583h7.164l1.583-1.583-1.455-4.535-3.61 1.444a1 1 0 01-.736 0l-3.61-1.444-1.455 4.535z" clip-rule="evenodd" />
+        </svg>
+      </div>
+      <div>
+        <h1 class="text-xl font-bold tracking-wider text-fx-text-primary">ANATOMIST <span class="text-fx-accent font-normal">REGISTRY</span></h1>
+        <p class="text-xs text-fx-text-secondary font-mono tracking-widest uppercase">Codenome Dissector Modules</p>
+      </div>
+    </div>
+
+    <!-- Search Omnibar -->
+    <div class="flex-1 max-w-2xl mx-12">
+      <div class="relative group">
+        <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+          <svg class="w-4 h-4 text-fx-text-secondary group-focus-within:text-fx-accent transition-colors" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+          </svg>
+        </div>
+        <input type="search" id="omnibar-search" class="block w-full p-3 pl-10 text-sm text-fx-text-primary bg-fx-bg-surface border border-fx-border-subtle rounded-lg focus:ring-fx-accent focus:border-fx-accent transition-all duration-300 placeholder-fx-text-secondary outline-none font-mono" placeholder="Search modules, languages, databases..." required>
+        <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+          <kbd class="px-2 py-1 text-xs font-semibold text-fx-text-secondary bg-fx-bg-primary border border-fx-border-subtle rounded-md">⌘K</kbd>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Actions -->
+    <div class="flex items-center space-x-6">
+      
+      <!-- Theme Toggle -->
+      <button (click)="toggleTheme()" class="relative flex items-center justify-center w-10 h-10 rounded-full bg-fx-bg-surface border border-fx-border-subtle hover:border-fx-accent text-fx-text-secondary hover:text-fx-accent transition-all duration-300">
+        <svg *ngIf="!isSolarMode" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <svg *ngIf="isSolarMode" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+      </button>
+
+      <a href="#" class="text-sm font-mono text-fx-text-secondary hover:text-fx-accent transition-colors">Documentation</a>
+      <a href="#" class="text-sm font-mono text-fx-text-secondary hover:text-fx-accent transition-colors">mForce CLI</a>
+      <button class="bg-fx-accent-hover hover:bg-fx-accent text-white font-mono text-sm px-4 py-2 rounded transition-colors shadow-neon">Sign In</button>
+    </div>
+
+  </div>
+</header>

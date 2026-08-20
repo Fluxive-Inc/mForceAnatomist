@@ -1,0 +1,48 @@
+<div #rendererContainer class="w-full h-full relative overflow-hidden">
+  
+  <!-- Overlay UI elements -->
+  <div class="absolute top-8 left-8 pointer-events-none z-10">
+    <h1 class="text-4xl font-display font-bold text-white tracking-widest drop-shadow-md">The Atrium</h1>
+    <p class="text-xs font-mono text-fx-accent tracking-[0.3em] uppercase mt-2 drop-shadow-md">Spatial Greenhouse / Active Mapping</p>
+  </div>
+  
+  <div class="absolute bottom-8 right-8 pointer-events-none z-10 text-right">
+    <p class="text-xs font-mono text-fx-text-secondary/50 tracking-[0.2em] uppercase">Scroll: Walk Through Hallway</p>
+    <p class="text-xs font-mono text-fx-text-secondary/50 tracking-[0.2em] uppercase mt-1">Hover & Click: Dissect Roots</p>
+  </div>
+
+  <!-- Raycaster Driven Tooltip -->
+  @if (hoveredSystem) {
+    <div 
+      class="absolute z-20 pointer-events-none transition-opacity duration-200"
+      [style.left.px]="mouseX + 20"
+      [style.top.px]="mouseY - 20"
+    >
+      <div class="glass-tooltip flex flex-col gap-2">
+        <div class="flex items-center gap-3 border-b border-fx-border-subtle pb-3 mb-2">
+          <i [class]="hoveredSystem.devicon + ' text-3xl text-fx-accent'"></i>
+          <div>
+            <h3 class="text-lg font-display font-bold text-white tracking-wider">{{ hoveredSystem.name }}</h3>
+            <p class="text-[10px] font-mono text-fx-text-secondary tracking-[0.2em] uppercase">Holographic Specimen</p>
+          </div>
+        </div>
+        
+        <p class="text-xs font-data text-fx-text-secondary/80 max-w-[200px] mb-3">{{ hoveredSystem.overview }}</p>
+        
+        <div class="space-y-1">
+          <p class="text-[9px] font-mono text-fx-accent tracking-widest uppercase mb-1">Available Dissectors:</p>
+          @for (mod of hoveredSystem.modules; track mod.name) {
+            <div class="flex items-center gap-2">
+              <div class="w-1 h-1 bg-fx-accent rounded-full shadow-neon"></div>
+              <span class="text-[10px] font-mono text-white/90">{{ mod.name }}</span>
+            </div>
+          }
+        </div>
+        
+        <div class="mt-4 pt-3 border-t border-fx-border-subtle text-right">
+          <span class="text-[10px] font-mono text-fx-accent font-bold tracking-[0.2em]">CLICK TO DISSECT →</span>
+        </div>
+      </div>
+    </div>
+  }
+</div>

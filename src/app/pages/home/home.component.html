@@ -1,0 +1,60 @@
+<app-header></app-header>
+
+<main class="max-w-7xl mx-auto px-6 py-8">
+  
+  <!-- Hero Section -->
+  <section class="mb-12 text-center py-16 glass-panel relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-[rgba(0,212,255,0.05)] to-transparent pointer-events-none"></div>
+    <h2 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">Expand your <span class="text-fx-accent drop-shadow-neon">Architect.</span></h2>
+    <p class="text-lg text-fx-text-secondary max-w-2xl mx-auto font-body">
+      Download and install official Codenome Dissector Modules to map new languages, cloud infrastructures, and databases within your mForce ecosystem.
+    </p>
+  </section>
+
+  <div class="flex flex-col md:flex-row gap-8">
+    
+    <!-- Sidebar Filtering -->
+    <aside class="w-full md:w-64 flex-shrink-0">
+      <div class="sticky top-32">
+        <h3 class="text-xs font-mono uppercase tracking-widest text-fx-text-secondary mb-4 px-2">Categories</h3>
+        <ul class="space-y-2 font-data">
+          <li *ngFor="let cat of categories">
+            <button 
+              (click)="setCategory(cat)"
+              [class.bg-fx-bg-surface]="activeCategory === cat"
+              [class.text-fx-accent]="activeCategory === cat"
+              [class.border-fx-border-subtle]="activeCategory === cat"
+              [class.border-transparent]="activeCategory !== cat"
+              class="w-full text-left px-4 py-2 rounded-lg border hover:bg-fx-bg-surface hover:text-white transition-colors duration-200">
+              {{ cat }}
+            </button>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Module Grid -->
+    <div class="flex-1">
+      <ng-container *ngIf="modules$ | async as modules; else loading">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <ng-container *ngFor="let mod of modules">
+            <app-module-card 
+              *ngIf="activeCategory === 'All' || mod.category === activeCategory"
+              [module]="mod">
+            </app-module-card>
+          </ng-container>
+        </div>
+      </ng-container>
+
+      <ng-template #loading>
+        <div class="flex items-center justify-center h-64">
+          <div class="animate-pulse flex flex-col items-center">
+            <div class="w-12 h-12 border-4 border-fx-border-subtle border-t-fx-accent rounded-full animate-spin mb-4"></div>
+            <p class="text-fx-text-secondary font-mono text-sm uppercase tracking-widest">Scanning Registry...</p>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+
+  </div>
+</main>

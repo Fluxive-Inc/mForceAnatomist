@@ -1,0 +1,113 @@
+<div class="h-full flex gap-10 pt-10">
+  
+  <!-- Left Pane: Taxonomy Menu (Master) -->
+  <div class="w-80 flex flex-col shrink-0 overflow-y-auto pr-2 custom-scrollbar pb-8">
+    <div class="mb-6">
+      <h1 class="text-3xl font-display font-bold tracking-wider mb-2">Root Systems</h1>
+      <p class="text-fx-text-secondary text-sm font-data">Glossary & Dissection Hub</p>
+    </div>
+
+    <div class="space-y-4">
+      @for (category of taxonomy; track category.id) {
+        <div class="glass-panel overflow-hidden transition-all duration-300 border" [ngClass]="expandedCategory === category.id ? 'border-fx-accent shadow-neon' : 'border-fx-border-subtle hover:border-fx-accent-secondary'">
+          
+          <!-- Category Header -->
+          <button (click)="toggleCategory(category.id)" class="w-full flex items-center justify-between p-4 bg-fx-bg-surface text-left focus:outline-none group">
+            <div>
+              <h2 class="font-display font-bold text-fx-text-primary tracking-[0.1em] transition-colors" [ngClass]="expandedCategory === category.id ? 'text-fx-accent' : 'group-hover:text-fx-accent-secondary'">{{ category.name }}</h2>
+              <p class="text-[10px] font-mono text-fx-text-secondary/70 mt-1 tracking-[0.3em] uppercase">{{ category.metaphor }}</p>
+            </div>
+            <svg class="w-4 h-4 text-fx-text-secondary transition-transform duration-300" [ngClass]="{'rotate-180 text-fx-accent': expandedCategory === category.id}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          <!-- Category Items -->
+          <div class="transition-all duration-300 ease-in-out bg-fx-bg-primary overflow-hidden" [style.max-height]="expandedCategory === category.id ? '500px' : '0'">
+            <div class="p-2 space-y-1">
+              @for (system of category.systems; track system.id) {
+                <button 
+                  (click)="selectSystem(system)"
+                  class="w-full text-left px-4 py-2 rounded text-sm font-data transition-colors flex items-center relative group/item"
+                  [ngClass]="selectedSystem?.id === system.id ? 'bg-fx-accent/10 text-white' : 'text-fx-text-secondary hover:text-white hover:bg-fx-bg-surface'"
+                >
+                  <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-fx-accent transition-all duration-300 group-hover/item:h-1/2" [ngClass]="{'h-full shadow-neon': selectedSystem?.id === system.id}"></div>
+                  <span class="ml-2">{{ system.name }}</span>
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Right Pane: Detail View (The Dissection) -->
+  <div class="flex-1 flex flex-col min-w-0 overflow-y-auto pb-8 custom-scrollbar">
+    @if (selectedSystem) {
+      <!-- The Holographic Overview -->
+      <div class="glass-panel p-10 mb-10 relative overflow-hidden group border-fx-border-subtle shadow-neon shrink-0 holographic-watermark" [attr.data-system]="selectedSystem.id">
+        <div class="absolute inset-0 bg-fx-accent opacity-5"></div>
+        <div class="absolute -top-10 -right-10 w-40 h-40 bg-fx-accent rounded-full filter blur-[80px] opacity-20 pointer-events-none"></div>
+        
+        <div class="flex items-start justify-between relative z-10">
+          <div>
+            <div class="inline-flex items-center space-x-2 mb-4">
+              <div class="w-2 h-2 rounded-full bg-fx-accent animate-pulse shadow-neon"></div>
+              <span class="text-xs font-mono text-fx-accent tracking-widest uppercase">Holographic Overview</span>
+            </div>
+            <h2 class="text-4xl font-display font-bold text-white mb-4">{{ selectedSystem.name }}</h2>
+            <p class="text-sm text-fx-accent font-mono max-w-3xl leading-relaxed tracking-wide">> {{ selectedSystem.overview }}</p>
+          </div>
+          
+          <!-- Decorative UI Element -->
+          <div class="w-16 h-16 rounded-full border border-fx-accent/30 flex items-center justify-center relative">
+            <div class="absolute inset-2 rounded-full border border-fx-accent/50 border-dashed animate-[spin_10s_linear_infinite]"></div>
+            <div class="absolute inset-4 rounded-full border border-fx-accent shadow-neon animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- The DissectorModule Registry -->
+      <div class="flex-1 shrink-0">
+        <h3 class="text-lg font-display font-bold text-white/90 mb-8 flex items-center tracking-wide">
+          <svg class="w-5 h-5 mr-4 text-fx-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+          </svg>
+          DissectorModule Registry
+        </h3>
+
+        <div class="relative pl-6">
+          <!-- Glowing Timeline Vine -->
+          <div class="absolute left-[7px] top-4 bottom-0 w-[2px] bg-gradient-to-b from-fx-accent via-fx-accent-secondary to-transparent opacity-50 shadow-neon"></div>
+
+          <div class="space-y-8">
+            @for (module of selectedSystem.modules; track module.name) {
+              <div class="relative group">
+                <!-- Glowing Seed Node -->
+                <div class="absolute -left-[30px] top-1.5 w-4 h-4 rounded-full bg-fx-bg-primary border-2 border-fx-accent z-10 group-hover:bg-fx-accent transition-colors duration-300 shadow-neon flex items-center justify-center">
+                  <div class="w-1 h-1 rounded-full bg-fx-accent group-hover:bg-fx-bg-primary transition-colors"></div>
+                </div>
+
+                <div class="glass-panel p-6 border-fx-border-subtle group-hover:border-fx-border-subtle group-hover:shadow-neon transition-all duration-300">
+                  <div class="flex items-center justify-between mb-3">
+                    <h4 class="font-mono text-fx-accent font-bold">{{ module.name }}</h4>
+                    <button class="text-xs px-4 py-1.5 rounded bg-fx-bg-primary border border-fx-border-subtle text-fx-text-secondary hover:text-fx-accent hover:border-fx-border-subtle hover:shadow-neon transition-all font-data">Parse Root</button>
+                  </div>
+                  <p class="text-sm text-fx-text-secondary font-data">{{ module.description }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div class="flex-1 flex flex-col items-center justify-center text-fx-text-secondary">
+        <svg class="w-16 h-16 mb-4 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+        <p class="font-display tracking-widest uppercase text-sm">Select a Root System to dissect</p>
+      </div>
+    }
+  </div>
+</div>

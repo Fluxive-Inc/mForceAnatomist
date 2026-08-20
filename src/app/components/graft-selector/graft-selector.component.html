@@ -1,0 +1,107 @@
+<div class="h-full flex flex-col pt-8">
+  <div class="mb-12">
+    <h1 class="text-4xl font-display font-bold tracking-wider mb-2">Cross-Pollination Matrix</h1>
+    <p class="text-fx-text-secondary font-data max-w-2xl">Select the origin framework (The Soil) and the destination framework (The Graft). The Anatomist will compute the structural AST bridging logic and highlight the mapping paths.</p>
+  </div>
+
+  <div class="flex-1 flex items-center justify-center relative min-h-[500px]">
+    
+    <!-- Connective UI (Glowing Roots) -->
+    <div class="absolute inset-0 pointer-events-none flex items-center justify-center">
+      <svg class="w-full h-32" preserveAspectRatio="none" viewBox="0 0 1000 100">
+        <!-- Baseline root -->
+        <path d="M 250 50 C 400 50, 600 50, 750 50" fill="none" stroke="currentColor" stroke-width="2" class="text-fx-border-subtle" />
+        <!-- Glowing animated root (Active Path) -->
+        <path *ngIf="selectedSoil && selectedGraft" d="M 250 50 C 400 50, 600 50, 750 50" fill="none" stroke="currentColor" stroke-width="3" class="text-fx-accent animate-pulse shadow-neon" style="filter: drop-shadow(0 0 8px var(--fx-accent))" />
+        
+        <!-- Cross-pollination data particles -->
+        <circle *ngIf="selectedSoil && selectedGraft" cx="500" cy="50" r="4" fill="currentColor" class="text-fx-accent">
+          <animate attributeName="cx" values="250; 750" dur="2s" repeatCount="indefinite" />
+        </circle>
+        <circle *ngIf="selectedSoil && selectedGraft" cx="500" cy="50" r="3" fill="currentColor" class="text-fx-accent">
+          <animate attributeName="cx" values="250; 750" dur="1.5s" repeatCount="indefinite" begin="0.5s" />
+        </circle>
+      </svg>
+    </div>
+
+    <div class="w-full max-w-5xl flex justify-between items-center z-10 gap-16 relative">
+      
+      <!-- The Soil Card -->
+      <div class="flex-1 glass-panel p-8 relative overflow-hidden group">
+        <!-- Glowing Frame -->
+        <div class="absolute inset-0 border border-fx-accent opacity-0 group-hover:opacity-50 transition-opacity duration-500 rounded-[0.75rem]"></div>
+        <div class="absolute -inset-1 bg-gradient-to-r from-fx-accent to-fx-accent-secondary opacity-0 group-hover:opacity-10 blur-xl transition-opacity duration-500 rounded-[0.75rem] -z-10"></div>
+
+        <h2 class="text-xl font-display font-bold text-fx-accent tracking-widest mb-6 uppercase">The Soil (Origin)</h2>
+        
+        <div class="space-y-6 h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+          @for (category of categories; track category.id) {
+            <div>
+              <h3 class="text-xs font-mono text-fx-text-secondary uppercase tracking-widest mb-3 border-b border-fx-border-subtle pb-1">{{ category.name }}</h3>
+              <div class="grid grid-cols-2 gap-3">
+                @for (framework of category.frameworks; track framework.id) {
+                  <button 
+                    (click)="selectSoil(framework.id)"
+                    class="relative p-3 rounded bg-fx-bg-surface border transition-all duration-300 text-left overflow-hidden flex items-center group/btn holographic-watermark"
+                    [attr.data-system]="framework.id"
+                    [ngClass]="selectedSoil === framework.id ? 'border-fx-accent shadow-neon' : 'border-fx-border-subtle hover:border-fx-accent-secondary'"
+                  >
+                    <div class="absolute inset-0 bg-fx-accent opacity-0 group-hover/btn:opacity-10 transition-opacity" [ngClass]="{'opacity-10': selectedSoil === framework.id}"></div>
+                    <div class="w-8 h-8 rounded-full border flex items-center justify-center mr-3 transition-colors shrink-0"
+                      [ngClass]="selectedSoil === framework.id ? 'border-fx-accent text-fx-accent' : 'border-fx-border-subtle text-fx-text-secondary group-hover/btn:border-fx-accent-secondary group-hover/btn:text-fx-accent-secondary'">
+                      <span class="font-display font-bold text-xs">{{ framework.icon }}</span>
+                    </div>
+                    <span class="font-data tracking-wide text-sm transition-colors" [ngClass]="selectedSoil === framework.id ? 'text-white' : 'text-fx-text-secondary group-hover/btn:text-white'">{{ framework.name }}</span>
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Action Orb (Center) -->
+      <div class="w-24 h-24 shrink-0 rounded-full glass-panel flex items-center justify-center relative z-20 cursor-pointer group border-fx-accent shadow-neon">
+        <div class="absolute inset-0 rounded-full bg-fx-accent opacity-10 group-hover:opacity-20 transition-opacity animate-pulse"></div>
+        <svg class="w-10 h-10 text-fx-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      </div>
+
+      <!-- The Graft Card -->
+      <div class="flex-1 glass-panel p-8 relative overflow-hidden group">
+        <!-- Glowing Frame -->
+        <div class="absolute inset-0 border border-fx-accent opacity-0 group-hover:opacity-50 transition-opacity duration-500 rounded-[0.75rem]"></div>
+        <div class="absolute -inset-1 bg-gradient-to-r from-fx-accent to-fx-accent-secondary opacity-0 group-hover:opacity-10 blur-xl transition-opacity duration-500 rounded-[0.75rem] -z-10"></div>
+
+        <h2 class="text-xl font-display font-bold text-fx-accent tracking-widest mb-6 uppercase">The Graft (Target)</h2>
+        
+        <div class="space-y-6 h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+          @for (category of categories; track category.id) {
+            <div>
+              <h3 class="text-xs font-mono text-fx-text-secondary uppercase tracking-widest mb-3 border-b border-fx-border-subtle pb-1">{{ category.name }}</h3>
+              <div class="grid grid-cols-2 gap-3">
+                @for (framework of category.frameworks; track framework.id) {
+                  <button 
+                    (click)="selectGraft(framework.id)"
+                    class="relative p-3 rounded bg-fx-bg-surface border transition-all duration-300 text-left overflow-hidden flex items-center group/btn holographic-watermark"
+                    [attr.data-system]="framework.id"
+                    [ngClass]="selectedGraft === framework.id ? 'border-fx-accent shadow-neon' : 'border-fx-border-subtle hover:border-fx-accent-secondary'"
+                  >
+                    <div class="absolute inset-0 bg-fx-accent opacity-0 group-hover/btn:opacity-10 transition-opacity" [ngClass]="{'opacity-10': selectedGraft === framework.id}"></div>
+                    <div class="w-8 h-8 rounded-full border flex items-center justify-center mr-3 transition-colors shrink-0"
+                      [ngClass]="selectedGraft === framework.id ? 'border-fx-accent text-fx-accent' : 'border-fx-border-subtle text-fx-text-secondary group-hover/btn:border-fx-accent-secondary group-hover/btn:text-fx-accent-secondary'">
+                      <span class="font-display font-bold text-xs">{{ framework.icon }}</span>
+                    </div>
+                    <span class="font-data tracking-wide text-sm transition-colors" [ngClass]="selectedGraft === framework.id ? 'text-white' : 'text-fx-text-secondary group-hover/btn:text-white'">{{ framework.name }}</span>
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

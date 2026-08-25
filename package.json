@@ -23,7 +23,11 @@
     "rxjs": "~7.8.0",
     "three": "^0.184.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.14.3"
+    "zone.js": "~0.14.3",
+    "express": "^4.19.2",
+    "cookie-parser": "^1.4.6",
+    "pg": "^8.13.1",
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.3.17",

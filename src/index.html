@@ -34,5 +34,19 @@
         .catch(err => console.warn('[FluxiveProxy] SW failed:', err));
     }
   </script>
+
+    <!-- mForceOS1 Orbital Protocol -->
+    <script>
+        window.addEventListener('mforce-theme-change', (e) => {
+            if (e.detail && e.detail.theme === 'solar') {
+                document.body.classList.add('solar-theme');
+                document.body.classList.remove('lunar-theme');
+            } else {
+                document.body.classList.add('lunar-theme');
+                document.body.classList.remove('solar-theme');
+            }
+        });
+    </script>
 </body>
+
 </html>

@@ -1,23 +1,97 @@
+# ══════════════════════════════════════════════════════════════
+# mforceanatomist — canary pipeline (mForceOS1 canonical)
+# build -> push -> dark canary (0% traffic) -> smoke test -> promote.
+# A bad build never takes traffic; a good one always does.
+#
+# This previously ended at the deploy step with `--no-traffic --tag canary`
+# and NOTHING after it. Every build produced a revision pinned at 0%, so the
+# live service never changed no matter how many times it was deployed. The
+# Promote step below is what actually makes a build reachable.
+# ══════════════════════════════════════════════════════════════
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA', '.']
+    id: 'Build'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/mforceanatomist:$COMMIT_SHA', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA']
+    id: 'Push'
+    args: ['push', 'gcr.io/$PROJECT_ID/mforceanatomist:$COMMIT_SHA']
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
+    id: 'Deploy-Canary'
+    entrypoint: bash
     args:
-      - 'run'
-      - 'deploy'
-      - 'mforceanatomist'
-      - '--image'
-      - 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
-      - '--region'
-      - 'us-east1'
-      - '--platform'
-      - 'managed'
-      - '--no-traffic'
-      - '--tag'
-      - 'canary'
-      - '--allow-unauthenticated'
+      - '-c'
+      - |
+        # BOOTSTRAP vs CANARY. `--no-traffic` is rejected when the service does
+        # not yet exist ("not supported when creating a new service") — a
+        # 0%-traffic first revision would leave nothing serving. So the first
+        # build takes traffic directly; every later build goes dark first.
+        if gcloud run services describe mforceanatomist \
+             --region us-east1 --project $PROJECT_ID >/dev/null 2>&1; then
+          MODE=canary; TRAFFIC_ARGS="--no-traffic --tag canary"
+        else
+          MODE=bootstrap; TRAFFIC_ARGS=""
+          echo "[Deploy] first revision of mforceanatomist — deploying live"
+        fi
+        echo "$$MODE" > /workspace/deploy_mode
+        echo "[Deploy] mode=$$MODE"
+
+        gcloud run deploy mforceanatomist \
+          --image gcr.io/$PROJECT_ID/mforceanatomist:$COMMIT_SHA \
+          --region us-east1 \
+          --platform managed \
+          $$TRAFFIC_ARGS \
+          --allow-unauthenticated \
+          --quiet
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Smoke-Test'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        MODE=$$(cat /workspace/deploy_mode 2>/dev/null || echo canary)
+        if [ "$$MODE" = "canary" ]; then
+          URL=$$(gcloud run services describe mforceanatomist --region us-east1 --project $PROJECT_ID --format=json \
+            | python3 -c "import json,sys;d=json.load(sys.stdin);print(next((t.get('url','') for t in d.get('status',{}).get('traffic',[]) if t.get('tag')=='canary'),''))" 2>/dev/null || true)
+          echo "[Smoke] canary -> $$URL"
+        else
+          URL=$$(gcloud run services describe mforceanatomist --region us-east1 --project $PROJECT_ID --format='value(status.url)' 2>/dev/null || true)
+          echo "[Smoke] bootstrap (live) -> $$URL"
+        fi
+        [ -z "$$URL" ] && { echo "[Smoke] no URL to test"; exit 1; }
+
+        # NOTE: /api/v1/health sits behind requireAuth and 302s to / without a
+        # __session cookie, so it cannot tell a healthy app from a broken one.
+        # `/` serves the perimeter page unauthenticated, so a 200 there is a
+        # real liveness signal. Retried — a cold start can take a few seconds.
+        for i in 1 2 3 4 5 6; do
+          CODE=$$(curl -s -o /dev/null -w "%{http_code}" --max-time 25 "$$URL/" || echo 000)
+          echo "[Smoke] attempt $$i -> HTTP $$CODE"
+          case "$$CODE" in
+            200|302) echo "[Smoke] OK"; exit 0 ;;
+          esac
+          sleep 10
+        done
+        echo "[Smoke] service did not answer with 200/302 — aborting before promote"
+        exit 1
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Promote'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        MODE=$$(cat /workspace/deploy_mode 2>/dev/null || echo canary)
+        if [ "$$MODE" = "bootstrap" ]; then
+          echo "[Traffic] bootstrap revision already serving 100% — nothing to promote"
+          exit 0
+        fi
+        gcloud run services update-traffic mforceanatomist --to-latest --region us-east1 --project $PROJECT_ID --quiet
+        gcloud run services update-traffic mforceanatomist --remove-tags canary --region us-east1 --project $PROJECT_ID --quiet 2>/dev/null || true
+        echo "[Traffic] mforceanatomist: 100% -> new revision"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+timeout: 1800s

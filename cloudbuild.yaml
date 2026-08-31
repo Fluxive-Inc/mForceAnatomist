@@ -11,7 +11,7 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Build'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/mforceanatomist:$COMMIT_SHA', '.']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/mforceanatomist:$COMMIT_SHA', 'mForceAnatomist_v1.0.0']
 
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Push'

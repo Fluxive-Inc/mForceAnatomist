@@ -63,3 +63,58 @@ __pycache__/
 *.md
 !mForceOS1.md
 !README.md
+
+# archived one-time/non-runtime files (local only)
+_archive/
+
+mForce.sh
+_archive/
+
+# ══ Machineforce fleet standard — managed by mForceOS1.sh sync (do not edit below) ══
+node_modules/
+**/node_modules/
+dist/
+build/
+**/build/
+build/web/
+.dart_tool/
+**/.dart_tool/
+.fuse_hidden*
+**/.fuse_hidden*
+.DS_Store
+# ── secrets: NEVER commit (examples are fine) ──
+.env
+.env.*
+!.env.example
+*-key.json
+sa-key*.json
+credentials.json
+service-account*.json
+# ── stray/nested git + cloud config ──
+.git_backup/
+**/.git_backup/
+.gcloud_config/
+**/.gcloud_config/
+# ── backups / dead / scratch ──
+*.bak
+*.bak.*
+*.bak_*
+_bak/
+**/_bak/
+*.old
+*.orig
+*.disabled
+*.DEAD*
+*~
+*.swp
+*.tmp
+*.pre-uniform
+*.pre-*
+# ── logs ──
+*.log
+**/logs/
+# ── local dev tooling (vendored by `mForceOS1.sh sync`; not service code) ──
+mForce.sh
+_setup/
+_archive/
+# ══ end fleet standard ══

@@ -24,13 +24,13 @@ steps:
 
         set -e
 
-        V=$(ls -d mForceAnatomist_v[0-9]*/ 2>/dev/null | sed 's#/##' | sort -V | tail -1)
+        V=$$(ls -d mForceAnatomist_v[0-9]*/ 2>/dev/null | sed 's#/##' | sort -V | tail -1)
 
-        [ -n "$V" ] || { echo 'no mForceAnatomist_v* version dir'; exit 1; }
+        [ -n "$$V" ] || { echo 'no mForceAnatomist_v* version dir'; exit 1; }
 
-        ln -sfn "$V" current
+        ln -sfn "$$V" current
 
-        echo "[version] building $V via ./current"
+        echo "[version] building $$V via ./current"
 
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Build'

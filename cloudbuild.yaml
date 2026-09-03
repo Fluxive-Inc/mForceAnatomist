@@ -43,6 +43,8 @@ steps:
           --platform managed \
           $$TRAFFIC_ARGS \
           --allow-unauthenticated \
+          --update-env-vars NODE_ENV=production,FIREBASE_AUTH_PROJECT=fluxive-machineforce \
+          --update-secrets PERIMETER_SECRET=mforceanatomist-perimeter-secret:latest \
           --quiet
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'

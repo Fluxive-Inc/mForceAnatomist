@@ -3,7 +3,7 @@ const express = require('express');
 const db = require('./db');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-const { signSession, requireAuth } = require('./perimeter-guard');
+const { sessionLogin, requireAuth } = require('./perimeter-guard');
 
 const app = express();
 app.use(cookieParser());
@@ -34,18 +34,7 @@ app.get('/', (req, res) => {
 });
 
 // 2. Auth Handshake
-app.post('/sessionLogin', (req, res) => {
-    const idToken = req.body.idToken;
-    if (!idToken) return res.status(401).json({error: 'Unauthorized'});
-    
-    const sessionCookie = signSession(idToken);
-    res.cookie('__session', sessionCookie, {
-        maxAge: 1000 * 60 * 60 * 24 * 5, // 5 days
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production'
-    });
-    res.json({ status: 'success' });
-});
+app.post('/sessionLogin', sessionLogin);
 
 // 3. Authenticated App Entry
 app.get('/app', requireAuth, (req, res) => {

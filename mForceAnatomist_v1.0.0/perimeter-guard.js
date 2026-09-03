@@ -1,6 +1,6 @@
 // ⚠ VENDORED — DO NOT EDIT HERE.
 // Source of truth: .mforce/perimeter/guard-c.js   ·   change it there, then run ./sync-perimeter.sh
-// Synced: 2026-09-03T02:48:26Z
+// Synced: 2026-09-03T16:08:26Z
 'use strict';
 /**
  * perimeter-guard.js — HARDENED (shared across the consumer apps).

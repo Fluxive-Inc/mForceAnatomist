@@ -1,0 +1,93 @@
+/* ============================================================================
+ * command-deck.css — CANONICAL Machineforce fleet theme (single source of truth)
+ *
+ * Source of truth: the mForceScience Design Studio (Command Deck design system).
+ * Lunar (dark) is the :root default; Solar (light) is applied by mForceLaunch via
+ * body.solar-mode (Orbital Protocol). Read-only pages that Launch never toggles
+ * also honor the operator's OS preference via the prefers-color-scheme fallback.
+ *
+ * ADOPTION (no loss of functionality): an app imports this file FIRST, sets its
+ * one --accent, then aliases its own legacy variable names to the --cd-* tokens
+ * below. Every existing selector keeps resolving — now sourced from the shared
+ * system, with solar/lunar for free. Change a token here → the whole fleet moves.
+ *
+ * Per-app knob: --accent  (everything accent-driven derives from it via color-mix)
+ * ==========================================================================  */
+
+:root{
+  color-scheme:dark;
+
+  /* ── the ONE per-app knob ─────────────────────────────────────────────── */
+  --accent:#3B82F6;                     /* Fluxive blue; each app overrides   */
+
+  /* ── grounds & surfaces (Lunar) ──────────────────────────────────────── */
+  --cd-bg:#04060A;                      /* app background                     */
+  --cd-deck:#06080D;                    /* bounded deck                       */
+  --cd-panel:#0E1117;                   /* cards & rails                      */
+  --cd-panel-2:#12151C;                 /* raised panel                       */
+  --cd-surface:#161A22;                 /* raised controls                    */
+  --cd-line:#20252F;                    /* hairline dividers                  */
+  --cd-line-2:#2A3140;                  /* stronger borders                   */
+
+  /* ── ink tiers ───────────────────────────────────────────────────────── */
+  --cd-ink:#E9EEF5;                     /* primary text                       */
+  --cd-ink-2:#B4BCC9;                   /* secondary text                     */
+  --cd-dim:#AEB7C4;                     /* dim text                           */
+  --cd-mut:#7E8899;                     /* labels / meta                      */
+  --cd-mut-2:#5C6675;                   /* faintest                           */
+
+  /* ── semantic (separate from accent) ─────────────────────────────────── */
+  --cd-ok:#34D399;
+  --cd-warn:#F59E0B;
+  --cd-crit:#F43F5E;
+
+  /* ── neural lattice node (rgb triplet for rgba()) ────────────────────── */
+  --cd-lat-node:255,255,255;
+
+  /* ── corner radius scale ─────────────────────────────────────────────── */
+  --cd-r-1:2px; --cd-r-2:3px; --cd-r-3:5px; --cd-r-4:6px; --cd-r-5:8px;
+
+  /* ── typography ──────────────────────────────────────────────────────── */
+  --cd-sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --cd-disp:'Orbitron',var(--cd-sans);
+  --cd-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+
+  /* ── accent-derived (auto-recolor with --accent) ─────────────────────── */
+  --cd-accent-wash:color-mix(in srgb,var(--accent) 14%,transparent);
+  --cd-accent-soft:color-mix(in srgb,var(--accent) 22%,transparent);
+  --cd-accent-line:color-mix(in srgb,var(--accent) 40%,var(--cd-line-2));
+  --cd-focus:color-mix(in srgb,var(--accent) 48%,transparent);
+  --cd-on-accent:#06121a;               /* text on a solid accent fill        */
+}
+
+/* ── Solar (light) — hosted by mForceLaunch (body.solar-mode) ───────────── */
+body.solar-mode{
+  color-scheme:light;
+  --cd-bg:#F5F7FA; --cd-deck:#FFFFFF; --cd-panel:#FFFFFF; --cd-panel-2:#EEF2F7; --cd-surface:#E8EEF5;
+  --cd-line:#D8DEE8; --cd-line-2:#C4CDD9;
+  --cd-ink:#0F172A; --cd-ink-2:#334155; --cd-dim:#475569; --cd-mut:#64748B; --cd-mut-2:#94A3B8;
+  --cd-lat-node:71,85,105;
+  --cd-on-accent:#06121a;
+}
+
+/* ── System-preference fallback: only for pages Launch never toggles, and only
+ *    when no explicit theme is stamped. Never overrides an operator's choice. ── */
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]):not(.force-lunar):not(.solar-mode){
+    --cd-bg:#F5F7FA; --cd-deck:#FFFFFF; --cd-panel:#FFFFFF; --cd-panel-2:#EEF2F7; --cd-surface:#E8EEF5;
+    --cd-line:#D8DEE8; --cd-line-2:#C4CDD9;
+    --cd-ink:#0F172A; --cd-ink-2:#334155; --cd-dim:#475569; --cd-mut:#64748B; --cd-mut-2:#94A3B8;
+    --cd-lat-node:71,85,105;
+  }
+}
+
+/* ── shared fleet enhancements (additive; safe defaults, easily overridden) ─ */
+::selection{background:color-mix(in srgb,var(--accent) 30%,transparent)}
+:focus-visible{outline:2px solid var(--cd-focus);outline-offset:2px;border-radius:var(--cd-r-2)}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--cd-line-2);border-radius:5px}
+::-webkit-scrollbar-thumb:hover{background:color-mix(in srgb,var(--accent) 40%,var(--cd-line-2))}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}

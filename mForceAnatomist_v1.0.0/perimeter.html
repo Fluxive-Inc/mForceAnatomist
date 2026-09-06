@@ -1,159 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Machineforce™ Command Deck</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --ac: #0066FF; /* Default accent, can be overridden per app */
-            --bg-color: #04060A;
-            --deck-bg: #06080D;
-            --text-main: #FFFFFF;
-            --text-muted: #AEB7C4;
-        }
-        body {
-            margin: 0;
-            padding: 0;
-            background: var(--bg-color);
-            background-image: radial-gradient(900px 500px at 50% -10%, color-mix(in srgb, var(--ac) 10%, transparent), transparent 70%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            font-family: 'Inter', sans-serif;
-            color: var(--text-main);
-        }
-        .deck {
-            width: 96vw;
-            max-width: 1060px;
-            aspect-ratio: 16/10;
-            border-radius: 18px;
-            background: var(--deck-bg);
-            border: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            flex-direction: row;
-            overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            position: relative;
-        }
-        .left-panel {
-            flex: 1;
-            padding: 60px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .right-panel {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle at center, rgba(255,255,255,0.02) 0%, transparent 70%);
-        }
-        .brand-row {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 14px;
-            letter-spacing: 2px;
-            margin-bottom: 40px;
-            color: var(--text-muted);
-        }
-        .eyebrow {
-            font-family: 'JetBrains Mono', monospace;
-            letter-spacing: 3px;
-            color: var(--text-muted);
-            font-size: 12px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-        .title {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            font-size: 48px;
-            margin: 0 0 15px 0;
-            background: linear-gradient(to right, var(--ac), #fff, var(--ac));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .tagline {
-            color: var(--text-muted);
-            font-size: 16px;
-            line-height: 1.5;
-            margin-bottom: 50px;
-        }
-        .stats {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            line-height: 2;
-        }
-        .stats .active { color: var(--ac); }
-        .footer {
-            position: absolute;
-            bottom: 20px;
-            left: 60px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            color: rgba(255,255,255,0.3);
-        }
-        .gate-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--ac);
-            border-radius: 12px;
-            padding: 40px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-        .chip {
-            display: inline-block;
-            border: 1px solid var(--ac);
-            color: var(--ac);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-family: 'JetBrains Mono', monospace;
-            margin-bottom: 20px;
-        }
-        @media (max-width: 720px) {
-            .deck { flex-direction: column; aspect-ratio: 3/4; }
-            .left-panel { padding: 40px; }
-            .footer { left: 40px; }
-        }
-    </style>
-</head>
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Machineforce™ Command Deck</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+  /* ── Orbital Protocol tokens · Lunar default, Solar override (design-protocol §3-§5) ── */
+  :root{
+    --ac:#10B981;
+    --bg:#04060A; --deck:#06080D; --gate:#080b11; --panel:#0a0e14;
+    --ink:#E9EEF5; --dim:#AEB7C4; --mut:#5c6b7f; --line:#1b2431;
+    --title-hi:#FFFFFF; --lat-node:255,255,255; --lat-line-a:.8; --lat-node-a:.85;
+    --radius:14px; --radius-sm:8px;
+  }
+  body.solar-mode{
+    --bg:#F5F7FA; --deck:#FFFFFF; --gate:#FFFFFF; --panel:#EEF2F7;
+    --ink:#0F172A; --dim:#475569; --mut:#94A3B8; --line:#D8DEE8;
+    --title-hi:#0F172A; --lat-node:71,85,105; --lat-line-a:.5; --lat-node-a:.6;
+  }
+  *{box-sizing:border-box} html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;display:grid;place-items:center;min-height:100dvh;padding:24px;transition:background-color .4s ease,color .4s ease;background-image:radial-gradient(900px 500px at 50% -10%, color-mix(in srgb, var(--ac) 10%, transparent), transparent 70%);}
+  .deck{position:relative;width:min(1060px,96vw);aspect-ratio:16/10;border-radius:var(--radius);background:var(--deck);border:1px solid color-mix(in srgb, var(--ac) 22%, var(--line));container-type:inline-size;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.5),0 30px 80px rgba(0,0,0,.35);display:grid;grid-template-columns:1.15fr 1fr;transition:background-color .4s ease}
+  #lattice{position:absolute;inset:0;z-index:0;display:block}
+  .fluxmark{position:absolute;top:3.2cqw;right:3.2cqw;z-index:3;width:4.2cqw;height:4.2cqw;border-radius:9px;display:grid;place-items:center;background:var(--bg);border:1px solid color-mix(in srgb,var(--ac) 30%,var(--line));box-shadow:0 0 0 4px color-mix(in srgb,var(--ac) 12%,transparent)}
+  .fluxmark b{font-family:Orbitron;font-weight:900;font-size:2.4cqw;color:var(--ac)}
+  .left{position:relative;z-index:2;padding:6cqw 5cqw;display:flex;flex-direction:column;gap:2.4cqw;justify-content:center}
+  .brand{display:flex;align-items:center;gap:1.4cqw}
+  .logo,.gate .glogo{width:3.4cqw;height:3.4cqw;border-radius:var(--radius-sm);display:grid;place-items:center;background:color-mix(in srgb,var(--ac) 16%,var(--panel));border:1px solid color-mix(in srgb,var(--ac) 40%,var(--line))}
+  .logo svg,.gate .glogo svg{width:2.1cqw;height:2.1cqw}
+  .brand .who{font-family:'JetBrains Mono',monospace;font-size:1.15cqw;line-height:1.5;color:var(--dim)}
+  .brand .who b{color:var(--ink);font-weight:700}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:1.05cqw;letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
+  h1{margin:0;font-family:Orbitron;font-weight:900;font-size:5.4cqw;line-height:1;letter-spacing:-.01em;background:linear-gradient(100deg,var(--ac),var(--title-hi) 52%,var(--ac));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .tag{margin:0;color:var(--dim);font-size:1.55cqw;max-width:34cqw;line-height:1.5}
+  .stats{display:flex;flex-wrap:wrap;gap:1.2cqw;margin-top:1cqw;font-family:'JetBrains Mono',monospace;font-size:1.05cqw;letter-spacing:.06em}
+  .stat{display:flex;align-items:center;gap:.6cqw;color:var(--dim)}
+  .stat .d{width:.7cqw;height:.7cqw;border-radius:50%;background:var(--ac);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{50%{opacity:.35}}
+  .right{position:relative;z-index:2;display:grid;place-items:center;padding:5cqw 4cqw;border-left:1px solid color-mix(in srgb,var(--ac) 12%,var(--line))}
+  .right::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(60cqw 60cqw at 70% 40%, color-mix(in srgb,var(--ac) 12%,transparent), transparent 60%)}
+  .wm{position:absolute;font-family:Orbitron;font-weight:900;font-size:22cqw;color:color-mix(in srgb,var(--ac) 6%,transparent);z-index:1;user-select:none;line-height:1}
+  .gate{position:relative;z-index:2;width:min(30cqw,100%);background:var(--gate);border:1px solid color-mix(in srgb,var(--ac) 22%,var(--line));border-radius:var(--radius);padding:3.2cqw;text-align:center;display:flex;flex-direction:column;gap:1.6cqw;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+  .chip{align-self:center;font-family:'JetBrains Mono',monospace;font-size:.95cqw;letter-spacing:.18em;text-transform:uppercase;padding:.5cqw 1.2cqw;border-radius:20px;color:var(--ac);border:1px solid color-mix(in srgb,var(--ac) 45%,transparent)}
+  #mfGate{font-size:1.35cqw;color:var(--ink)}
+  #mfGate .sub{display:block;color:var(--dim);font-size:1.1cqw;margin-top:.6cqw}
+  #mfGate .arrow{display:inline-block;color:var(--ac);animation:nudge 1.6s ease-in-out infinite}
+  #mfGate .cta{display:inline-flex;align-items:center;justify-content:center;gap:.6cqw;margin-top:1cqw;padding:1cqw 2cqw;border-radius:var(--radius-sm);font-family:Inter,sans-serif;font-weight:600;font-size:1.2cqw;color:#04121a;background:var(--ac);text-decoration:none}
+  @keyframes nudge{50%{transform:translateY(3px)}}
+  .foot{position:absolute;left:0;right:0;bottom:0;z-index:2;display:flex;justify-content:space-between;gap:2cqw;padding:1.6cqw 3.4cqw;font-family:'JetBrains Mono',monospace;font-size:.92cqw;letter-spacing:.05em;color:var(--mut);border-top:1px solid color-mix(in srgb,var(--ac) 10%,var(--line));background:linear-gradient(transparent,rgba(0,0,0,.15))}
+  @container (max-width:720px){ .deck{grid-template-columns:1fr;aspect-ratio:3/4} .right{border-left:0;border-top:1px solid color-mix(in srgb,var(--ac) 12%,var(--line))} }
+  @media (max-width:720px){ h1{font-size:9vw} .tag,.eyebrow,.stats,#mfGate,.brand .who,.foot,.chip{font-size:2.6vw} }
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important} }
+</style></head>
 <body>
-
-<div class="deck">
-    <div class="left-panel">
-        <div class="brand-row">FLUXIVE INC</div>
-        <div class="eyebrow" id="app-eyebrow">SYSTEM MODULE</div>
-        <h1 class="title" id="app-title">mForceAnatomist</h1>
-        <p class="tagline">Static is obsolete. The future is Fluxive.<br>Access restricted to authorized operators.</p>
-        
-        <div class="stats">
-            <div>● SYSTEM ONLINE</div>
-            <div>● PERIMETER ARMED</div>
-            <div class="active">● LAUNCH — GO</div>
+  <main class="deck">
+    <canvas id="lattice"></canvas>
+    <div class="fluxmark"><b>F</b></div>
+    <section class="left">
+      <div class="brand"><span class="logo"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2 L22 12 L12 22 L2 12 Z" stroke="var(--ac)" stroke-width="1.75" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="var(--ac)"/></svg></span><div class="who">Machineforce&trade; <b>Command Deck</b><br>FLUXIVE INC</div></div>
+      <div class="eyebrow">SECURE PERIMETER &middot; DCOS</div>
+      <h1>Command Deck</h1>
+      <p class="tag">Protected by the mForceLaunch Perimeter — authenticate to enter the command deck.</p>
+      <div class="stats"><span class="stat"><span class="d"></span>SYSTEM ONLINE</span><span class="stat"><span class="d"></span>PERIMETER ARMED</span><span class="stat"><span class="d"></span>LAUNCH — GO</span></div>
+    </section>
+    <section class="right">
+      <div class="wm">C</div>
+      <div class="gate">
+        <span class="glogo"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2 L22 12 L12 22 L2 12 Z" stroke="var(--ac)" stroke-width="1.75" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="var(--ac)"/></svg></span>
+        <span class="chip">Restricted Access</span>
+        <div id="mfGate">Operator sign-in via the Launchpad
+          <span class="sub">Use the Launchpad pill <span class="arrow">&#9662;</span></span>
         </div>
-    </div>
-    
-    <div class="right-panel">
-        <div class="gate-card">
-            <div class="chip">RESTRICTED ACCESS</div>
-            <p style="margin-bottom:30px; font-size:14px; color:var(--text-muted)">Operator sign-in via the Launchpad ▾</p>
-            <!-- Launchpad Bootloader Injection Target -->
-            <div id="mforce-launch-container"></div>
-        </div>
-    </div>
-    
-    <div class="footer">© 2026 FLUXIVE INC · MACHINEFORCE™ | SECURE PERIMETER · ENCRYPTION: AES-256-GCM</div>
-</div>
-
-<!-- Launchpad Bootloader -->
-<script src="https://run.fluxive.ai/neural-lattice.js" async></script>
-<script src="https://run.fluxive.ai/launch.js" data-mfu-key="mfu_anatomist_perimeter" async></script>
-
-<script>
+      </div>
+    </section>
+    <div class="foot"><span>&copy; 2026 FLUXIVE INC &middot; MACHINEFORCE&trade;</span><span>SECURE PERIMETER &middot; ENCRYPTION: AES-256-GCM</span></div>
+  </main>
+  <script>
+  /* Orbital Protocol — mode is owned by mForceLaunch; this surface only listens. */
+  (function(){function ap(sol){document.body.classList.toggle('solar-mode',!!sol);}
+    window.addEventListener('message',function(e){var d=e&&e.data;if(d&&d.type==='MFORCE_THEME_CHANGE'){var p=d.payload||d;ap(p.solar===true||p.theme==='theme-solaris-prime'||p.theme==='solar'||p.mode==='light');}});
+    window.addEventListener('mforce-theme-change',function(e){var d=(e&&e.detail)||{};ap(d.solar===true||d.theme==='solar'||d.mode==='solar'||d.mode==='light');});
+    try{var p=localStorage.getItem('mforce-theme')||localStorage.getItem('mforce_theme');if(p==='solar')ap(true);}catch(_){}
+  })();
+  (function(){var cv=document.getElementById('lattice');if(!cv||!cv.getContext)return;var ctx=cv.getContext('2d');if(!ctx)return;var AR=16,AG=185,AB=129,CONNECT=120,MOUSE=120,SPEED=0.25;var nodes=[],W=0,H=0,DPR=1,mx=-9999,my=-9999;var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;function tok(n,d){var v=getComputedStyle(document.body).getPropertyValue(n).trim();return v||d;}function size(){var r=cv.getBoundingClientRect();DPR=Math.min(window.devicePixelRatio||1,2);W=r.width;H=r.height;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);var c=Math.max(36,Math.min(90,Math.round(W*H/16000)));nodes=[];for(var i=0;i<c;i++){nodes.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*SPEED,vy:(Math.random()-0.5)*SPEED,r:Math.random()*1.5+1,p:Math.random()*Math.PI*2});}}function frame(){var t=(window.performance?performance.now():Date.now())*0.0006,i,j,n;var node=tok('--lat-node','255,255,255');var la=parseFloat(tok('--lat-line-a','.8'))||.8;var na=parseFloat(tok('--lat-node-a','.85'))||.85;ctx.clearRect(0,0,W,H);for(i=0;i<nodes.length;i++){n=nodes[i];n.x+=n.vx+Math.sin(t+n.p)*0.15;n.y+=n.vy+Math.cos(t+n.p)*0.12;if(n.x<0)n.x=W;if(n.x>W)n.x=0;if(n.y<0)n.y=H;if(n.y>H)n.y=0;var dx=mx-n.x,dy=my-n.y,d=Math.sqrt(dx*dx+dy*dy);if(d<MOUSE){var f=(1-d/MOUSE)*0.04;n.x+=dx*f;n.y+=dy*f;}}for(i=0;i<nodes.length;i++)for(j=i+1;j<nodes.length;j++){var a=nodes[i],b=nodes[j],ex=a.x-b.x,ey=a.y-b.y,dd=Math.sqrt(ex*ex+ey*ey);if(dd<CONNECT){ctx.strokeStyle='rgba('+AR+','+AG+','+AB+','+((1-dd/CONNECT)*la)+')';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}for(i=0;i<nodes.length;i++){n=nodes[i];var pulse=Math.sin(t*2+n.p)*0.3+0.7,rr=n.r*pulse;ctx.fillStyle='rgba('+AR+','+AG+','+AB+','+(0.18*pulse)+')';ctx.beginPath();ctx.arc(n.x,n.y,rr*3.2,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba('+node+','+(na*pulse)+')';ctx.beginPath();ctx.arc(n.x,n.y,rr,0,Math.PI*2);ctx.fill();}if(!reduce)requestAnimationFrame(frame);}var deck=cv.parentElement;deck.addEventListener('mousemove',function(e){var r=cv.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;});deck.addEventListener('mouseleave',function(){mx=-9999;my=-9999;});window.addEventListener('resize',function(){size();if(reduce)frame();});size();frame();})();
+  </script>
+  <script src="https://run.fluxive.ai/neural-lattice.js" async></script>
+  <script src="https://run.fluxive.ai/launch.js" data-mfu-key="mfu_anatomist_perimeter" async></script>
+  <script>
     // ── mForceLaunch v2 host contract ──────────────────────────────────────
     // interactions/mForceLaunch_interaction.md §1/§5 + perimeter-protocol §3.
     // The host only listens and sizes the enclave; the pill owns tokens,
@@ -240,5 +174,4 @@
       });
     })();
 </script>
-</body>
-</html>
+</body></html>

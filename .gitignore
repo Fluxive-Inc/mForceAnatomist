@@ -126,3 +126,16 @@ _archive/
 *.bak_*
 *.auditbak
 *.orig-bak
+
+# ── ecosystem hygiene guard (audit 2026-09) — never track build output / venvs / scratch ──
+**/node_modules/
+**/venv/
+**/test_venv/
+**/__pycache__/
+**/.dart_tool/
+**/build/web/
+**/dist/
+_to_delete/
+**/_to_delete/
+*.pre_*
+*.pre_subsadmin

@@ -5,7 +5,7 @@
     background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(45, 212, 191, 0.5);
-    border-radius: 8px;
+    border-radius:2px;
     padding: 16px 24px;
     cursor: pointer;
     z-index: 999999;

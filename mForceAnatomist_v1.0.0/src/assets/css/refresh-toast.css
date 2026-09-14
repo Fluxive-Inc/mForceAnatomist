@@ -15,17 +15,17 @@
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 .fx-toast:hover {
-    border-color: #2DD4BF;
+    border-color: var(--fx-accent-secondary);
     box-shadow: 0 4px 20px rgba(45, 212, 191, 0.2);
 }
 .fx-toast-title {
-    color: #2DD4BF;
+    color: var(--fx-accent-secondary);
     font-weight: bold;
     letter-spacing: 2px;
     font-size: 14px;
     margin-bottom: 4px;
 }
 .fx-toast-desc {
-    color: #94A3B8;
+    color: var(--mut);
     font-size: 12px;
 }

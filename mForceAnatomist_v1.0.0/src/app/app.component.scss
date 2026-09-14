@@ -36,7 +36,7 @@
     font-family: 'Orbitron', sans-serif;
     font-size: 2.5rem;
     font-weight: 800;
-    color: #fff;
+    color: var(--deck);
     letter-spacing: 0.1em;
     margin: 0 0 0.5rem 0;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
@@ -44,7 +44,7 @@
 
   .plaque-strength {
     font-family: 'JetBrains Mono', monospace;
-    color: #2DD4BF;
+    color: var(--fx-accent-secondary);
     font-size: 1.2rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -72,7 +72,7 @@
         content: "►";
         position: absolute;
         left: 0;
-        color: #10B981;
+        color: var(--ac);
         font-size: 0.8rem;
         top: 0.2rem;
       }
@@ -82,20 +82,20 @@
   .plaque-status {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.8rem;
-    color: #94a3b8;
+    color: var(--mut);
     background: rgba(255, 255, 255, 0.05);
     padding: 1rem;
     border-radius:2px;
     margin-bottom: 2rem;
-    border-left: 3px solid #10B981;
+    border-left: 3px solid var(--ac);
   }
 
   .plaque-btn {
     width: 100%;
     padding: 1rem;
     background: rgba(16, 185, 129, 0.1);
-    border: 1px solid #10B981;
-    color: #10B981;
+    border: 1px solid var(--ac);
+    color: var(--ac);
     font-family: 'JetBrains Mono', monospace;
     font-weight: 700;
     font-size: 1rem;
@@ -104,7 +104,7 @@
     transition: all 0.2s ease;
 
     &:hover {
-      background: #10B981;
+      background: var(--ac);
       color: #020617;
       box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
     }

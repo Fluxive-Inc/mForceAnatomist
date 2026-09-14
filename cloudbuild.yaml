@@ -171,11 +171,20 @@ steps:
   args:
     - '-c'
     - |
-      if [ -d current/migrations ]; then
-        echo "[${_APP}] Step 08 MIGRATE — migrations present; applied by the app at boot"
-        ls current/migrations | head -10 | sed 's/^/    /'
+      # protocols/mForceOS1_db-migration-protocol.md: "A code deploy never
+      # migrates the DB". This step REPORTS; it does not apply. It used to look
+      # at current/migrations — a path no app uses — and, on the branch it could
+      # never reach, claim migrations were "applied by the app at boot". No app
+      # in this fleet has a boot migration runner, so that message was false as
+      # well as against the standard.
+      if [ -d current/db/migrations ]; then
+        N=$$(ls current/db/migrations/*.sql 2>/dev/null | wc -l | tr -d ' ')
+        echo "[${_APP}] Step 08 MIGRATE — $$N migration file(s) present. THIS PIPELINE DOES NOT APPLY THEM."
+        ls current/db/migrations | head -10 | sed 's/^/    /'
+        echo "[${_APP}]   apply out of band:  bash _scripts/mforce-migrate.sh ${_APP}"
+        echo "[${_APP}]   a deploy that assumes they ran will query columns that do not exist."
       else
-        echo "[${_APP}] Step 08 MIGRATE — not required for ${_APP}: no migrations/ directory"
+        echo "[${_APP}] Step 08 MIGRATE — no db/migrations directory in ${_APP}; nothing to report"
       fi
 
 # ── Step 09 BUILD-IMAGE ───────────────────────────────────────────────
@@ -219,6 +228,7 @@ steps:
       TRAFFIC=""; [ "$$EXISTS" = y ] && TRAFFIC="--no-traffic --tag canary"
       gcloud run deploy ${_SERVICE} $$SRC \
         --region ${_REGION} --project ${_PROJECT} \
+        --ingress=all \
         --network=${_VPC_NET} --subnet=${_VPC_SUB} --vpc-egress=private-ranges-only \
         --revision-suffix=$$REV $$TRAFFIC \
         --update-env-vars="DEPLOY_HASH=$$HASH,DEPLOY_PIPELINE=cloud-build,DB_HOST=${_DB_HOST},DB_NAME=${_DB_NAME},DB_USER=${_DB_USER}" \

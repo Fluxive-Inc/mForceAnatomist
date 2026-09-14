@@ -181,20 +181,19 @@ steps:
         N=$$(ls current/db/migrations/*.sql 2>/dev/null | wc -l | tr -d ' ')
         echo "[${_APP}] Step 08 MIGRATE — $$N migration file(s) present. THIS PIPELINE DOES NOT APPLY THEM."
         ls current/db/migrations | head -10 | sed 's/^/    /'
-        # Name something that EXISTS. The previous line pointed at
-        # "_scripts/mforce-migrate.sh <app>" — wrong path (the runner lives in the app
-        # version dir, not the fleet root), wrong signature (it takes a migrations
-        # DIRECTORY, not an app name), and present in exactly one app. Sending someone
-        # to a missing script at the moment they need to apply a migration is worse
-        # than saying nothing. Resolve it at build time instead:
+        # Name the runner that EXISTS. This line used to read
+        # "bash _scripts/mforce-migrate.sh ${_APP}" — no such script at the fleet root,
+        # and the one app that has a file by that name takes a migrations DIRECTORY,
+        # not an app name. The real fleet client is _scripts/mf-migrate.sh: it drives
+        # the migration through mForceScience, the only service with a proven SQL route
+        # to AlloyDB on 10.97.0.2 (neither Cloud Build nor a laptop can reach it), and
+        # lands in the same audit trail as the console.
+        echo "[${_APP}]   apply out of band — plan first, then apply:"
+        echo "[${_APP}]       bash _scripts/mf-migrate.sh ${_APP} plan"
+        echo "[${_APP}]       bash _scripts/mf-migrate.sh ${_APP} apply --apply"
         if [ -f current/cloudbuild.migrate.yaml ]; then
-          echo "[${_APP}]   apply out of band:  gcloud builds submit --config cloudbuild.migrate.yaml --substitutions=_MODE=apply --project=${_PROJECT}"
-          echo "[${_APP}]                       (runs as a Cloud Run Job on the VPC connector — the AlloyDB private IP is not reachable from a workstation)"
-        elif [ -f current/_scripts/mforce-migrate.sh ]; then
-          echo "[${_APP}]   apply out of band:  PGHOST/PGUSER/PGPASSWORD/PGDATABASE + PGSSLMODE=require  bash current/_scripts/mforce-migrate.sh current/db/migrations"
-        else
-          echo "[${_APP}]   NO MIGRATION RUNNER IN THIS APP — it has migration files and no supported way to apply them."
-          echo "[${_APP}]   see protocols/mForceOS1_db-migration-protocol.md; port _scripts/mforce-migrate.sh + cloudbuild.migrate.yaml from mForceInflux."
+          echo "[${_APP}]   or in-VPC, as its own DATABASE pipeline (Cloud Run Job on the VPC connector):"
+          echo "[${_APP}]       gcloud builds submit --config cloudbuild.migrate.yaml --substitutions=_MODE=apply --project=${_PROJECT}"
         fi
         echo "[${_APP}]   a deploy that assumes they ran will query columns that do not exist."
       else

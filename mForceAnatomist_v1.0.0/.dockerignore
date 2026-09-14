@@ -1,0 +1,27 @@
+# ── mForce standard build-context exclusions ──────────────────────────────
+# Added 2026.09.14. Editing backups must never enter an image: 434 of them sat inside
+# the build contexts, many under public/ or web/, so previous versions of pages were
+# being served to anyone who guessed the filename. Local installs must not either —
+# they are rebuilt in the image, and a darwin-arm64 binary would shadow the linux/amd64
+# one that npm ci installs.
+*.pre_*
+*.bak
+*.bak_*
+*.orig
+*.rej
+*.guardtmp
+*~
+**/_to_delete/
+**/_archive/
+**/_superseded/
+**/node_modules
+**/venv/
+**/.venv/
+**/__pycache__/
+.git
+.gitignore
+**/.DS_Store
+*.log
+.env
+.env.*
+# ── end mForce standard exclusions ────────────────────────────────────────

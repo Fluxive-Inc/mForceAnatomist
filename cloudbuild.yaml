@@ -91,6 +91,15 @@ steps:
       ST=$$(gcloud alloydb instances describe primary --cluster fluxive-db-cluster \
             --region us-east1 --project mforce-os --format='value(state)' 2>/dev/null)
       if [ "$$ST" = "READY" ]; then echo "  ok       instance READY"
+      elif [ -z "$$ST" ]; then
+        # NO ANSWER is not a bad answer. The describe above is denied by the same
+        # missing roles/alloydb.viewer that the ROLES branch below already handles
+        # correctly, and setting FAIL here is why this step printed "Continuing"
+        # and then exited 1 — 21 of 25 apps red, some for over a week.
+        echo "  CANNOT VERIFY — this build cannot DESCRIBE the AlloyDB instance in mforce-os."
+        echo "           This is NOT proof the instance is down — it is proof we could not ask."
+        echo "           fix: bash grant-alloydb-viewer.sh   (grants roles/alloydb.viewer on mforce-os)"
+        echo "           Continuing — Step 12 VERIFY-DB still proves the connection for real."
       else echo "  FATAL    AlloyDB instance state='$$ST' (expected READY)"; FAIL=1; fi
       ROLES=$$(gcloud alloydb users list --cluster fluxive-db-cluster --region us-east1 \
                --project mforce-os --format='value(name.basename())' 2>&1); RC=$$?
@@ -242,7 +251,7 @@ steps:
       gcloud run deploy ${_SERVICE} $$SRC \
         --region ${_REGION} --project ${_PROJECT} \
         --ingress=all \
-        --network=${_VPC_NET} --subnet=${_VPC_SUB} --vpc-egress=private-ranges-only \
+        --network=${_VPC_NET} --subnet=${_VPC_SUB} --vpc-egress=private-ranges-only --clear-vpc-connector \
         --revision-suffix=$$REV $$TRAFFIC \
         --update-env-vars="DEPLOY_HASH=$$HASH,DEPLOY_PIPELINE=cloud-build,DB_HOST=${_DB_HOST},DB_NAME=${_DB_NAME},DB_USER=${_DB_USER}" \
         --update-secrets="$$SEC" --quiet \

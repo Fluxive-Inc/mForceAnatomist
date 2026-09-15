@@ -1,7 +1,7 @@
 // ⚠ VENDORED — DO NOT EDIT HERE.
 // Source of truth: .mforce/lib/refresh-guard/refresh-guard.js   ·   change it there, then run ./sync-modules.sh
-// Synced: 2026-09-14T01:57:18Z
-// [Protocol] fluXiveOS_refresh-protocol.md
+// Synced: 2026-09-14T21:15:06Z
+// [Protocol] mForceOS1_refresh-protocol.md
 // Handles system update detection and notification.
 
 const RefreshGuard = {

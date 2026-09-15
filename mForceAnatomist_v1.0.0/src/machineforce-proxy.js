@@ -1,6 +1,6 @@
 // ⚠ VENDORED — DO NOT EDIT HERE.
 // Source of truth: .mforce/lib/machineforce-proxy/machineforce-proxy.js   ·   change it there, then run ./sync-modules.sh
-// Synced: 2026-09-14T02:15:28Z
+// Synced: 2026-09-14T21:06:38Z
 /**
  * machineforce-proxy.js — the service worker that injects the operator's
  * bearer token into API calls so application JavaScript never handles it.

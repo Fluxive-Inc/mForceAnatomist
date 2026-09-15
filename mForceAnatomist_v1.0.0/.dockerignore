@@ -1,27 +1,16 @@
-# ── mForce standard build-context exclusions ──────────────────────────────
-# Added 2026.09.14. Editing backups must never enter an image: 434 of them sat inside
-# the build contexts, many under public/ or web/, so previous versions of pages were
-# being served to anyone who guessed the filename. Local installs must not either —
-# they are rebuilt in the image, and a darwin-arm64 binary would shadow the linux/amd64
-# one that npm ci installs.
-*.pre_*
-*.bak
-*.bak_*
-*.orig
-*.rej
-*.guardtmp
-*~
-**/_to_delete/
-**/_archive/
-**/_superseded/
-**/node_modules
-**/venv/
-**/.venv/
-**/__pycache__/
+# 2026.09.15: there was no .dockerignore, so every build shipped .git, the archive
+# directories and any local node_modules into the build context before the first
+# instruction ran. Small here (2.6M) but free to fix, and it keeps the context from
+# growing back.
 .git
 .gitignore
+node_modules
+dist
+.angular
+_archive
+_to_delete
+_setup
+**/*.bak_*
 **/.DS_Store
-*.log
-.env
-.env.*
-# ── end mForce standard exclusions ────────────────────────────────────────
+Dockerfile*
+.dockerignore

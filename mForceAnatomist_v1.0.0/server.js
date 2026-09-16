@@ -1,3 +1,4 @@
+try { require('./errlog-console'); } catch (_) {}   // C4: console.error/warn -> errlog
 require('dotenv').config();
 const express = require('express');
 const db = require('./db');
@@ -7,6 +8,16 @@ const { sessionLogin, requireAuth } = require('./perimeter-guard');
 
 const app = express();
 app.use(cookieParser());
+// Shared perimeter telemetry. telemetry() is non-blocking by design — it records
+// and emits, it never denies. armAuth() (rate limit / lockout / Turnstile) is NOT
+// mounted here: it belongs on this service's own auth routes.
+const _sec = require('./mforce-security')({ system: 'mForceAnatomist' });
+app.use(_sec.telemetry());
+// FLT-SCOPE-3 — fleet scoping is not optional and its absence must not be silent.
+// A missing or throwing fleet-scope.js used to leave req.fleetScope undefined, and
+// every scoped query then ran UNSCOPED. Refuse to start instead.
+try { app.use(require('./fleet-scope')); }
+catch (e) { console.error('[fleet-scope] FATAL: org scoping could not load — refusing to start unscoped:', e.message); process.exit(1); }
 app.use(express.json());
 
 app.get('/api/v1/health', requireAuth, async (req, res) => {

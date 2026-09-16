@@ -28,6 +28,9 @@ COPY --from=builder /app/dist/m-force-anatomist/browser ./dist
 # the container throws MODULE_NOT_FOUND at boot and the revision never becomes
 # healthy. The old pipeline had no smoke test, so this shipped silently.
 COPY server.js perimeter-guard.js perimeter.html db.js ./
+# Added by _scripts/fix-image-requires.sh — these are required at boot and were
+# not in the image. git shipping a file is not the same as the image holding it.
+COPY errlog-console.js fleet-scope.js mforce-security.js ./
 
 EXPOSE 8080
 ENV PORT=8080

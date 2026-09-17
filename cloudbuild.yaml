@@ -134,8 +134,28 @@ steps:
     - '-c'
     - |
       if [ -f current/package.json ]; then
-        echo "[${_APP}] Step 05 DEPS — npm install"
-        cd current && npm install --legacy-peer-deps
+        # FLT-NPM-1 (2026.09.17) — this step used to be a bare
+        # `npm install --legacy-peer-deps`, which REWRITES package-lock.json in the
+        # build workspace. Step 09 then runs `docker build … current`, and the
+        # Dockerfile's `npm ci` (no --legacy-peer-deps) validated package.json against
+        # the lock this step had just rewritten under different resolution rules. It
+        # failed with "can only install packages when your package.json and
+        # package-lock.json are in sync … Missing: @emnapi/core@…". The lock committed
+        # to git was never the problem: the pipeline was corrupting it in flight.
+        # `npm ci` does not write the lock. If the lock really is out of sync it fails
+        # and we fall through to the old behaviour, so this cannot regress an app that
+        # is passing today.
+        cd current
+        if [ -f package-lock.json ]; then
+          echo "[${_APP}] Step 05 DEPS — npm ci (lock-preserving)"
+          npm ci --legacy-peer-deps || {
+            echo "[${_APP}] Step 05 DEPS — lock is out of sync; falling back to npm install"
+            npm install --legacy-peer-deps
+          }
+        else
+          echo "[${_APP}] Step 05 DEPS — no lock; npm install"
+          npm install --legacy-peer-deps
+        fi
       else
         echo "[${_APP}] Step 05 DEPS — not required for ${_APP}: no package.json"
       fi
@@ -381,4 +401,8 @@ images:
 options:
   logging: CLOUD_LOGGING_ONLY
   machineType: 'E2_HIGHCPU_8'
-timeout: 2400s
+# FLT-TIMEOUT-1 (2026.09.17) — build 594ba5e8 was CANCELLED by Cloud Build at exactly
+# 2400s: "build exceed the duration(seconds:2400)". The step was still working, so
+# this is a budget, not a hang. Raised to 60m. If a build ever uses the whole hour,
+# that IS a hang and worth chasing — 2400s could not tell the two apart.
+timeout: 3600s

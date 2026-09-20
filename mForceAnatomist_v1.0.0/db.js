@@ -41,6 +41,12 @@ const pool = new Pool({
   database: process.env.DB_NAME || 'mforce_anatomist',
   port: process.env.DB_PORT || 5432,
 });
+// SCI-BOOT-2 — a pg Pool emits 'error' when an IDLE client's connection
+// drops. 'error' with no listener THROWS in Node, so a database blip
+// became an uncaught exception and killed the container — which Cloud
+// Run then reported as "failed to start and listen on the port". Log and
+// carry on: the pool discards the broken client and opens a new one.
+pool.on('error', (e) => { try { console.warn('[db] idle client error: ' + ((e && e.message) || e)); } catch (_) {} });
 
 module.exports = {
   query: (text, params) => pool.query(text, params),

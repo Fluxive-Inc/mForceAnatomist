@@ -46,15 +46,33 @@ steps:
       echo "[${_APP}] Step 02 PREFLIGHT — required secrets"
       FAIL=0
       for S in mforceanatomist-db-password mforceanatomist-perimeter-secret; do
-        if gcloud secrets versions access latest --secret=$$S --project=${_PROJECT} >/dev/null 2>&1; then
+        SERR=$$(mktemp)
+        if gcloud secrets versions access latest --secret=$$S --project=${_PROJECT} >/dev/null 2>$$SERR; then
           echo "  ok       $$S"
         else
-          echo "  MISSING  $$S  (or this build SA cannot read it)"
-          echo "    fix: gcloud secrets add-iam-policy-binding $$S --project=${_PROJECT} \\"
-          echo "         --member=serviceAccount:$$(gcloud projects describe ${_PROJECT} --format='value(projectNumber)')@cloudbuild.gserviceaccount.com \\"
-          echo "         --role=roles/secretmanager.secretAccessor"
+          # FLT-SEC-1 (2026.09.21) — ABSENT AND UNREADABLE ARE DIFFERENT FAULTS.
+          # This printed one message, "MISSING (or this build SA cannot read it)",
+          # for both — and then the grant command, which only fixes the second.
+          # A reader whose secret genuinely does not exist runs a binding against
+          # a secret that is not there and gets a confusing second error. It is
+          # the SCI-DEPLOY-8 lesson, unlearned in 27 pipelines: a secret is only
+          # MISSING when Google says NOT_FOUND.
+          if grep -qiE "NOT_FOUND|was not found|does not exist" $$SERR; then
+            echo "  ABSENT     $$S — no such secret in ${_PROJECT}."
+            echo "    fix: gcloud secrets create $$S --project=${_PROJECT} --replication-policy=automatic"
+            echo "         then add a version; the binding below is NOT the problem."
+          elif grep -qiE "PERMISSION_DENIED|Permission .* denied|403" $$SERR; then
+            echo "  UNREADABLE $$S — it EXISTS; this build account cannot read it."
+            echo "    fix: gcloud secrets add-iam-policy-binding $$S --project=${_PROJECT} \\"
+            echo "         --member=serviceAccount:$$(gcloud projects describe ${_PROJECT} --format='value(projectNumber)')@cloudbuild.gserviceaccount.com \\"
+            echo "         --role=roles/secretmanager.secretAccessor"
+          else
+            echo "  UNKNOWN    $$S — neither absent nor forbidden. gcloud said:"
+            sed 's/^/      /' $$SERR | head -3
+          fi
           FAIL=1
         fi
+        rm -f $$SERR
       done
       [ $$FAIL = 0 ] || exit 1
       echo "[${_APP}] Step 02 PREFLIGHT — all required secrets readable"
